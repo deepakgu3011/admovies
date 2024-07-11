@@ -23,10 +23,9 @@
                             <td scope="row">{{ $contact->name }}</td>
                             <td>{{ $contact->email }}</td>
                             <td>{{ $contact->message }}</td>
-                            <td><a href="#" onclick="reply()">Reply<i class="fa fa-mail-reply" aria-hidden="true"></i></a></td>
+                            <td><a href="#" onclick="reply('{{ $contact->email }}')">Reply<i class="fa fa-mail-reply" aria-hidden="true"></i></a></td>
                         </tr>
                     @endforeach
-
                 </tbody>
                 <tfoot>
                     <caption>
@@ -35,14 +34,14 @@
                 </tfoot>
             </table>
         </div>
-
     </div>
+
     <!-- Modal HTML -->
     <div class="modal fade" id="replyModal" tabindex="-1" role="dialog" aria-labelledby="replyModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="replyModalLabel">Reply To: {{ $contact->email ? $contact->email : '' }}</h5>
+                    <h5 class="modal-title" id="replyModalLabel">Reply To:</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -63,49 +62,47 @@
         </div>
     </div>
 
+    <script>
+        function reply(email) {
+            $('#replyModalLabel').text('Reply To: ' + email); // Set the email in the modal title
+            $('#replyModal').modal('show'); // Show the modal
 
-<script>
-    function reply() {
-        $('#replyModal').modal('show'); // Show the modal
+            // Submit form via AJAX
+            $('#replyForm').submit(function(event) {
+                event.preventDefault();
+                var replyMessage = $('#replyMessage').val();
 
-        // Submit form via AJAX
-        $('#replyForm').submit(function(event) {
-            event.preventDefault();
-            var replyMessage = $('#replyMessage').val();
-            var email = "{{ $contact->email }}";
-
-            $.ajax({
-                url: '{{ route("sendReply") }}',
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    email: email,
-                    replyMessage: replyMessage
-                },
-                success: function(response) {
-                    console.log(response); // Log response for debugging
-                    $('#replyModal').modal('hide'); // Hide the modal on success
-                    Swal.fire("Reply sent!", "", "success");
-                },
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText);
-                    if (xhr.status === 422) {
-                        var errors = JSON.parse(xhr.responseText).errors;
-                        var errorMessage = "Failed to send reply. Errors:\n";
-                        for (var key in errors) {
-                            if (errors.hasOwnProperty(key)) {
-                                errorMessage += errors[key] + "\n";
+                $.ajax({
+                    url: '{{ route("sendReply") }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        email: email,
+                        replyMessage: replyMessage
+                    },
+                    success: function(response) {
+                        console.log(response); // Log response for debugging
+                        $('#replyModal').modal('hide'); // Hide the modal on success
+                        Swal.fire("Reply sent!", "", "success");
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                        if (xhr.status === 422) {
+                            var errors = JSON.parse(xhr.responseText).errors;
+                            var errorMessage = "Failed to send reply. Errors:\n";
+                            for (var key in errors) {
+                                if (errors.hasOwnProperty(key)) {
+                                    errorMessage += errors[key] + "\n";
+                                }
                             }
+                            Swal.fire("Error!", errorMessage, "error");
+                        } else {
+                            Swal.fire("Error!", "Failed to send reply.", "error");
                         }
-                        Swal.fire("Error!", errorMessage, "error");
-                    } else {
-                        Swal.fire("Error!", "Failed to send reply.", "error");
                     }
-                }
+                });
             });
-        });
-    }
-</script>
-
+        }
+    </script>
 @endsection
