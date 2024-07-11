@@ -10,6 +10,38 @@
   </div>
   <div class="text-right"><p class="text-end text-danger" >* This Site is build for only educational Purpose</p></div>
   </footer>
+  <script>
+    function logout() {
+    Swal.fire({
+        title: "Do you want to logout?",
+        showDenyButton: true,
+        confirmButtonText: "Logout",
+        denyButtonText: "Cancel"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '{{ route("logout") }}', // Adjust the route as per your Laravel setup
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    console.log(response); // Log response for debugging
+                    Swal.fire("Logged out!", "", "success").then(() => {
+                        window.location.href = '/admovies/public';
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                    Swal.fire("Error!", "Failed to logout.", "error");
+                }
+            });
+        }
+    });
+}
+</script>
+
 
 <!-- Bootstrap JavaScript Libraries -->
 <script
