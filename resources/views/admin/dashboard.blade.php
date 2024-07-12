@@ -29,14 +29,15 @@
                 moviesList += '<p class="card-text"><strong>Release Date:</strong> ' + movie.rdate + '</p>';
                 moviesList += '<p class="card-text">' + movie.desc + '</p>';
                 moviesList += '<a href="' + movie.url + '" class="btn btn-success">Download</a>';
-                moviesList += '</div>'; // Close card-body
-                moviesList += '</div>'; // Close card
+                moviesList += '<a href="movie/' + movie.id + '/edit" class="btn btn-info m-2">Edit</a>';
+                moviesList += '<a href="movie/' + movie.id + '" class="btn btn-primary">Details</a>';
+                moviesList += '</div>';
+                moviesList += '</div>';
             });
-            moviesList += '</div>'; // Close card-deck
+            moviesList += '</div>';
 
-            $('#movies-container').html(moviesList); // Use html() to replace content instead of append()
+            $('#movies-container').html(moviesList);
 
-            // Optional: Initialize any JavaScript plugins or adjust DOM elements after rendering movies
         },
         error: function(xhr, status, error) {
             console.error(xhr.responseText);

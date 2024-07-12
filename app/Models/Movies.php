@@ -11,7 +11,7 @@ class Movies extends Model
 
     protected $table='movies/series';
     protected $fillable = [
-        'name', 'dirname', 'rdate', 'pic', 'desc','url','user_id','category',''
+        'name', 'dirname', 'rdate', 'pic', 'desc','url','user_id','category','status'
     ];
 
     public function users(){

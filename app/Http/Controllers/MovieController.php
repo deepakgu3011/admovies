@@ -47,7 +47,10 @@ class MovieController extends Controller
             'desc' => 'required|string',
             'category' => 'required|string|in:movies,webseries',
             'user_id' => 'required',
-        ]);
+        'status'=> 'required']);
+
+
+
 
         $data = $request->except('pic');
 
@@ -62,7 +65,7 @@ class MovieController extends Controller
         }
 
         $data['user_id'] = auth()->user()->id;
-
+        $data['status']="active";
             Movies::create($data);
 
         return redirect('dashboard')->with('success', 'Movie created successfully!');
@@ -88,7 +91,8 @@ class MovieController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $data['movie']=Movies::findorfail($id);
+        return view('admin.movie.show',$data);
     }
 
     /**
@@ -96,15 +100,50 @@ class MovieController extends Controller
      */
     public function edit(string $id)
     {
-        //
-    }
+        $data['movies']=Movies::findorfail($id);
+        return view('admin.movie.edit',$data);
+        }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255|unique:movies/series,name',
+            'dirname' => 'required|string|max:255',
+            'rdate' => 'required',
+            'pic' => 'nullable|image|max:10240',
+            'url' => 'required|url',
+            'desc' => 'required|string',
+            'category' => 'required|string|in:movies,webseries',
+            'status' => 'required|string|in:active,inactive',
+        ]);
+
+        $movie = Movies::findOrFail($id);
+
+        $movie->name = $request->name;
+        $movie->dirname = $request->dirname;
+        $movie->rdate = $request->rdate;
+        $movie->desc = $request->desc;
+        $movie->url = $request->url;
+        $movie->category = $request->category;
+        $movie->status = $request->status;
+
+        // Handle pic upload
+        if ($request->hasFile('pic')) {
+            $folder = $request->category === 'movies' ? 'movies' : 'webseries';
+            $filename = $request->file('pic')->getClientOriginalName();
+            $path = $request->file('pic')->storeAs('public/' . $folder, $filename);
+            $data['pic'] = 'storage/' . $folder . '/' . $filename;
+        } else {
+            return redirect()->back()->withErrors(['pic' => 'No file uploaded.']);
+        }
+
+        $movie->save();
+
+
+        return redirect()->route('dashboard')->with('success', 'Movie updated successfully');
     }
 
     /**

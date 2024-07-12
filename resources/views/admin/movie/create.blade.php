@@ -25,7 +25,7 @@
             <span class="text-danger">{{ $message }}</span>
 
             @enderror<br>
-            <label for="year">Realse Year</label>
+            <label for="year">Release Year</label>
             <input type="datetime" name="rdate" id="">@error('rdate')
             <span class="text-danger">{{ $message }}</span>
 

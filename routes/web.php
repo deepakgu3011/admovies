@@ -10,7 +10,7 @@ use App\Models\Movies;
 
 // Public routes
 Route::get('/', function () {
-    $data['movies']= Movies::all();
+    $data['movies']= Movies::all()->where('status','active');
     return view('welcome',$data);
 });
 

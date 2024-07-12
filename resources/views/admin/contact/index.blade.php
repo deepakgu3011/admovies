@@ -64,10 +64,9 @@
 
     <script>
         function reply(email) {
-            $('#replyModalLabel').text('Reply To: ' + email); // Set the email in the modal title
-            $('#replyModal').modal('show'); // Show the modal
+            $('#replyModalLabel').text('Reply To: ' + email);
+            $('#replyModal').modal('show');
 
-            // Submit form via AJAX
             $('#replyForm').submit(function(event) {
                 event.preventDefault();
                 var replyMessage = $('#replyMessage').val();

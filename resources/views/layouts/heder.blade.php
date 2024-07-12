@@ -30,9 +30,9 @@
     <header>
         <nav>
             @if (auth()->user())
-                <a href="{{ url('/dashboard') }}"><img src="favicon.ico" alt="Logo" id=icon></a>
+                <a href="{{ url('/dashboard') }}"><img src="{{ asset('favicon.ico') }}" alt="Logo" id="icon"></a>
             @else
-                <a href="{{ url('/') }}"><img src="favicon.ico" alt="Logo" id=icon></a>
+                <a href="{{ url('/') }}"><img src="{{ asset('favicon.ico') }}" alt="Logo" id=icon></a>
             @endif
 
             <ul>

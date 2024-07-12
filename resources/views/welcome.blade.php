@@ -20,7 +20,7 @@
                             <div class="card-body">
                                 <h5 class="card-title">{{ $movie->name }}</h5>
                                 <p class="card-text">Director: {{ $movie->dirname }}</p>
-                                <p class="card-text">Release Date: {{ $movie->rdate }}</p>
+                                <p class="card-text">Release Year: {{ $movie->rdate }}</p>
                                 <p class="card-text">{{ $movie->desc }}</p>
                                 <a href="{{ asset($movie->url) }}" class="btn btn-info">Click To Download</a>
                             </div>
