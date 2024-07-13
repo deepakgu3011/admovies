@@ -20,14 +20,14 @@
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: '{{ route("logout") }}', // Adjust the route as per your Laravel setup
+                url: '{{ route("logout") }}', 
                 type: 'POST',
                 dataType: 'json',
                 data: {
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(response) {
-                    console.log(response); // Log response for debugging
+                    console.log(response); 
                     Swal.fire("Logged out!", "", "success").then(() => {
                         window.location.href = '/admovies/public';
                     });
