@@ -15,7 +15,7 @@
                 @if ($movie->category === 'webseries')
                     <div class="col-lg-4 mb-4">
                         <div class="card">
-                            <img src="{{ url($movie->pic) }}" class="card-img-top" alt="{{ $movie->name }}"
+                            <img src="{{ asset($movie->pic) }}" class="card-img-top" alt="{{ $movie->name }}"
                                 style="    height: 200px;object-fit: cover;">
                             <div class="card-body">
                                 <h5 class="card-title">{{ $movie->name }}</h5>

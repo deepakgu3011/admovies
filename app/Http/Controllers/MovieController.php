@@ -37,9 +37,9 @@ class MovieController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request);
+        // dd($request->all());
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:movies/series,name',
             'dirname' => 'required|string|max:255',
             'rdate' => 'required',
             'pic' => 'required|max:10240',
@@ -47,7 +47,7 @@ class MovieController extends Controller
             'desc' => 'required|string',
             'category' => 'required|string|in:movies,webseries',
             'user_id' => 'required',
-        'status'=> 'required']);
+            ]);
 
 
 
@@ -55,20 +55,29 @@ class MovieController extends Controller
         $data = $request->except('pic');
 
         // Handle the file upload
-        if ($request->hasFile('pic')) {
-            $folder = $request->category === 'movies' ? 'movies' : 'webseries';
-            $filename = $request->file('pic')->getClientOriginalName();
-            $path = $request->file('pic')->storeAs('public/' . $folder, $filename);
-            $data['pic'] = 'storage/' . $folder . '/' . $filename;
-        } else {
-            return redirect()->back()->withErrors(['pic' => 'No file uploaded.']);
-        }
+       if ($request->hasFile('pic')) {
+    $folder = $request->category === 'movies' ? 'movies' : 'webseries';
+    $filename = $request->file('pic')->getClientOriginalName();
+    
+    // Ensure the directory exists
+    $directory = public_path($folder);
+    if (!file_exists($directory)) {
+        mkdir($directory, 0755, true);
+    }
+    
+    // Store the file in the public folder
+    $path = $request->file('pic')->move($directory, $filename);
+    $data['pic'] = $folder . '/' . $filename; // Adjust the path for saving in the database
+} else {
+    return redirect()->back()->withErrors(['pic' => 'No file uploaded.']);
+}
 
-        $data['user_id'] = auth()->user()->id;
-        $data['status']="active";
-            Movies::create($data);
+$data['user_id'] = auth()->user()->id;
+$data['status'] = "active";
+Movies::create($data);
 
-        return redirect('dashboard')->with('success', 'Movie created successfully!');
+return redirect()->route('dashboard')->with('success', 'Movie created successfully!');
+
     }
 
 
@@ -110,7 +119,7 @@ class MovieController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'name' => 'required|string|max:255|unique:movies/series,name',
+            'name' => 'required|string|max:255',
             'dirname' => 'required|string|max:255',
             'rdate' => 'required',
             'pic' => 'nullable|image|max:10240',
@@ -131,19 +140,28 @@ class MovieController extends Controller
         $movie->status = $request->status;
 
         // Handle pic upload
-        if ($request->hasFile('pic')) {
-            $folder = $request->category === 'movies' ? 'movies' : 'webseries';
-            $filename = $request->file('pic')->getClientOriginalName();
-            $path = $request->file('pic')->storeAs('public/' . $folder, $filename);
-            $data['pic'] = 'storage/' . $folder . '/' . $filename;
-        } else {
-            return redirect()->back()->withErrors(['pic' => 'No file uploaded.']);
-        }
+       if ($request->hasFile('pic')) {
+    $folder = $request->category === 'movies' ? 'movies' : 'webseries';
+    $filename = $request->file('pic')->getClientOriginalName();
+    
+    // Ensure the directory exists
+    $directory = public_path($folder);
+    if (!file_exists($directory)) {
+        mkdir($directory, 0755, true);
+    }
+    
+    // Store the file in the public folder
+    $path = $request->file('pic')->move($directory, $filename);
+    $data['pic'] = $folder . '/' . $filename; // Adjust the path for saving in the database
+} else {
+    return redirect()->back()->withErrors(['pic' => 'No file uploaded.']);
+}
 
-        $movie->save();
+// Assuming you already have the $movie instance to be updated
+$movie->update($data);
 
+return redirect()->route('dashboard')->with('success', 'Movie updated successfully');
 
-        return redirect()->route('dashboard')->with('success', 'Movie updated successfully');
     }
 
     /**

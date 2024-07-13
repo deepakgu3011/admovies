@@ -24,7 +24,7 @@
                 moviesList += '<div class="card" style="margin-top: 2rem;">';
                 moviesList += '<img src="' + movie.pic + '" class="card-img-top" alt="Movie Image" style="height:200px;object-fit: cover;">';
                 moviesList += '<div class="card-body">';
-                moviesList += '<h5 class="card-title"><a href="/movie/' + movie.id + '">' + movie.name + '</a></h5>'; // Adjusted URL construction
+                moviesList += '<h5 class="card-title"><a href="/movie/' + movie.id + '">' + movie.name + '</a></h5>'; 
                 moviesList += '<p class="card-text"><b>Director:</b> ' + movie.dirname + '</p>';
                 moviesList += '<p class="card-text"><strong>Release Date:</strong> ' + movie.rdate + '</p>';
                 moviesList += '<p class="card-text">' + movie.desc + '</p>';

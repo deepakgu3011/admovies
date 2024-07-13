@@ -20,7 +20,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             return redirect('dashboard');
         } else {
-            return back()->withInput()->withErrors(['username' => 'Invalid username or password']);
+            return redirect('login')->with('fail','Invalid username or password');
         }
     }
 
@@ -31,9 +31,10 @@ class AuthController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required',
         ]);
+
         User::create($request->all());
 
-        return back()->with('success', 'Register succssfuly!');
+        return redirect('login')->with('success', 'Register succssfuly!');
     }
     public function logout(Request $request)
     {
