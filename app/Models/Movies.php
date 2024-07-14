@@ -17,4 +17,7 @@ class Movies extends Model
     public function users(){
         return $this->belongsTo(User::class,'user_id');
     }
+    public function movieurl(){
+        return $this->hasMany(MoviesUrl::class);
+    }
 }

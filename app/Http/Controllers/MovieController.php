@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Movies;
 use App\Mail\ReplyMail;
+use App\Models\MoviesUrl;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -37,47 +38,47 @@ class MovieController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
         $request->validate([
-            'name' => 'required|string|max:255|unique:movies/series,name',
+            'name' => 'required|string|max:255',
             'dirname' => 'required|string|max:255',
-            'rdate' => 'required',
-            'pic' => 'required|max:10240',
-            'url' => 'required|url',
+            'rdate' => 'required|',
+            'pic' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'category' => 'required|string',
             'desc' => 'required|string',
-            'category' => 'required|string|in:movies,webseries',
-            'user_id' => 'required',
-            ]);
+        ]);
 
+        $movie = new Movies();
+        $movie->user_id = $request->user_id;
+        $movie->name = $request->name;
+        $movie->dirname = $request->dirname;
+        $movie->rdate = $request->rdate;
+        $movie->category = $request->category;
+        $movie->status ='active';
+        $movie->desc = $request->desc;
 
+        if ($request->hasFile('pic')) {
+            $image = $request->file('pic');
+            $name = time().'.'.$image->getClientOriginalExtension();
+            $destinationPath = public_path('/images');
+            $image->move($destinationPath, $name);
+            $movie->pic = $name;
+        }
 
+        $movie->save();
 
-        $data = $request->except('pic');
+        if ($request->urls) {
+            foreach ($request->urls as $index => $url) {
+                if (!empty($url)) {
+                    $movieUrl = new MoviesUrl();
+                    $movieUrl->movie_id = $movie->id;
+                    $movieUrl->url = $url;
+                    $movieUrl->file_size = $request->size[$index];
+                    $movieUrl->save();
+                }
+            }
+        }
 
-        // Handle the file upload
-       if ($request->hasFile('pic')) {
-    $folder = $request->category === 'movies' ? 'movies' : 'webseries';
-    $filename = $request->file('pic')->getClientOriginalName();
-    
-    // Ensure the directory exists
-    $directory = public_path($folder);
-    if (!file_exists($directory)) {
-        mkdir($directory, 0755, true);
-    }
-    
-    // Store the file in the public folder
-    $path = $request->file('pic')->move($directory, $filename);
-    $data['pic'] = $folder . '/' . $filename; // Adjust the path for saving in the database
-} else {
-    return redirect()->back()->withErrors(['pic' => 'No file uploaded.']);
-}
-
-$data['user_id'] = auth()->user()->id;
-$data['status'] = "active";
-Movies::create($data);
-
-return redirect()->route('dashboard')->with('success', 'Movie created successfully!');
-
+        return redirect()->back()->with('success', 'Movie or Webseries Added Successfully!');
     }
 
 
@@ -143,13 +144,13 @@ return redirect()->route('dashboard')->with('success', 'Movie created successful
        if ($request->hasFile('pic')) {
     $folder = $request->category === 'movies' ? 'movies' : 'webseries';
     $filename = $request->file('pic')->getClientOriginalName();
-    
+
     // Ensure the directory exists
     $directory = public_path($folder);
     if (!file_exists($directory)) {
         mkdir($directory, 0755, true);
     }
-    
+
     // Store the file in the public folder
     $path = $request->file('pic')->move($directory, $filename);
     $data['pic'] = $folder . '/' . $filename; // Adjust the path for saving in the database
