@@ -12,8 +12,9 @@
                     timer: 1500
                 });
             </script>
-        @endif
+            @endif
 
+        {{-- @dd($movies->movieurl) --}}
         <form action="{{ route('movie.update', $movies->id) }}" method="post" enctype="multipart/form-data">
             @csrf
             @method('PUT')
@@ -50,12 +51,28 @@
             @enderror
             <br>
 
-            <label for="year">Download Link</label>
-            <input type="url" name="url" value="{{ old('url', $movies->url ?? '') }}">
-            @error('url')
+            <div class="mb-3">
+                @if (isset($movies->movieurl) && count($movies->movieurl) > 0)
+                @foreach ($movies->movieurl as $url)
+                <label for="url" class="form-label">Download Link</label>
+                <input type="url" name="urls[]" value="{{ $url->url }}">
+                <label for="size">File Size</label>
+                <input type="text" name="size[]" value="{{ $url->file_size }}">
+                @endforeach
+                @else
+                <div id="url-inputs">
+                    <label for="url" style="width: auto;">Download Link</label>
+                    <span><button type="button" id="add-url" class="btn btn-success">+</button></span>
+                    <input type="url" name="urls[]" id="" >
+                    <label for="size">File Size</label>
+                    <input type="text" name="size[]" id="" >
+                </div>
+                @error('url')
                 <span class="text-danger">{{ $message }}</span>
-            @enderror
-            <br>
+                @enderror
+
+                @endif
+            </div>
 
             <label for="category">Select Category</label>
             @error('category')
@@ -88,8 +105,15 @@
                 <span class="text-danger">{{ $message }}</span>
             @enderror
             <br>
+            @php
+            if ($movies->category === 'webseries') {
+                $show = "Webseries";
+            } else {
+                $show = "Movie";
+            }
+        @endphp
 
-            <button type="submit" class="btn btn-success">Add Movie/ Series</button>
+            <button type="submit" class="btn btn-success">Update {{ $show   }}</button>
         </form>
     </div>
     <script>

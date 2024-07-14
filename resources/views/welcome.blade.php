@@ -38,7 +38,8 @@
                 @if ($movie->category === 'movies')
                     <div class="col-lg-4 mb-4">
                         <div class="card">
-                            <img src="{{ url($movie->pic) }}" class="card-img-top" alt="{{ $movie->name }}">
+                            <img src="{{ url($movie->pic) }}" class="card-img-top" alt="{{ $movie->name }}"
+                                style="height: 200px; object-fit: cover;">
                             <div class="card-body">
                                 <h5 class="card-title">{{ $movie->name }}</h5>
                                 <p class="card-text">Director: {{ $movie->dirname }}</p>
