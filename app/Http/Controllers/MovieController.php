@@ -70,7 +70,7 @@ class MovieController extends Controller
             foreach ($request->urls as $index => $url) {
                 if (!empty($url)) {
                     $movieUrl = new MoviesUrl();
-                    $movieUrl->movie_id = $movie->id;
+                    $movieUrl->movies_id = $movie->id;
                     $movieUrl->url = $url;
                     $movieUrl->file_size = $request->size[$index];
                     $movieUrl->save();
