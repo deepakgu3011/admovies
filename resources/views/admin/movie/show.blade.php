@@ -36,7 +36,13 @@
                                         &nbsp;</b>{{ $url->file_size }}</i></a></p>
                     @endforeach
                 @endif
+                @if (auth()->user())
                 <a href="{{ route('movie.edit', $movie->id) }}" class="btn btn-info m-3">Edit</a>
+                <a href="{{ route('dashboard') }}" class="btn btn-info m-3">Dashboard</a>
+                @else
+                <a href="{{ url('/') }}" class="btn btn-info m-3">Back to Home</a>
+
+                @endif
             </div>
         </div>
     </div>

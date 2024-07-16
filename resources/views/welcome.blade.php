@@ -22,7 +22,14 @@
                                 <p class="card-text">Director: {{ $movie->dirname }}</p>
                                 <p class="card-text">Release Year: {{ $movie->rdate }}</p>
                                 <p class="card-text">{{ $movie->desc }}</p>
-                                <a href="{{ asset($movie->url) }}" class="btn btn-info">Click To Download</a>
+                                @if (auth()->check())
+                                <a href="{{ route('movie.show', $movie->id) }}" class="btn btn-info">More
+                                    Information</a>
+                            @else
+                                <a href="{{ route('user.info',['id' => $movie->id]) }}" class="btn btn-info">More
+                                    Information</a>
+                            @endif
+
                             </div>
                         </div>
                     </div>
@@ -45,7 +52,14 @@
                                 <p class="card-text">Director: {{ $movie->dirname }}</p>
                                 <p class="card-text">Release Date: {{ $movie->rdate }}</p>
                                 <p class="card-text">{{ $movie->desc }}</p>
-                                <a href="{{ asset($movie->url) }}" class="btn btn-info">Click To Download</a>
+                                @if (auth()->check())
+                                    <a href="{{ route('movie.show', $movie->id) }}" class="btn btn-info">More
+                                        Information</a>
+                                @else
+                                    <a href="{{ route('user.info',['id' => $movie->id]) }}" class="btn btn-info">More
+                                        Information</a>
+                                @endif
+
                             </div>
                         </div>
                     </div>

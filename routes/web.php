@@ -10,10 +10,10 @@ use App\Models\Movies;
 
 // Public routes
 Route::get('/', function () {
-    $data['movies']= Movies::all()->where('status','active');
+    $data['movies']= Movies::with('movieurl')->where('status','active')->get();
     return view('welcome',$data);
 });
-
+Route::get('umovies/{id}',[MovieController::class,'ushow'])->name('user.info');
 Route::get('aboutus', function () {
     return view('about');
 });

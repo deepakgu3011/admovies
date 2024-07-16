@@ -98,6 +98,13 @@ class MovieController extends Controller
         return view('admin.movie.show', $data);
     }
 
+    public function ushow(string $id)
+    {
+        $data['movie'] = Movies::with('movieurl')->findOrFail($id);
+
+        return view('admin.movie.show', $data);
+    }
+
     public function edit(string $id)
     {
         $data['movies'] = Movies::with('movieurl')->findOrFail($id);

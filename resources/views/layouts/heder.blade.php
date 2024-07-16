@@ -40,12 +40,13 @@
             @endif
 
             <ul>
-                <li><a href="{{ url('aboutus ') }}">About Us</a></li>
                 @if (auth()->user())
+                <li><a href="{{ url('dashboard') }}">Dashboard</a></li>
                     <li><a href="{{ route('contacts.index') }}">Contacts</a></li>
                     <li><a href="#" onclick="logout()">Logout</a></li>
                 </li>
                 @else
+                    <li><a href="{{ url('aboutus') }}">About Us</a></li>
                     <li><a href="{{ url('contact') }}">Contact Us</a></li>
                     <li><a href="{{ url('login') }}">Login</a></li>
                 @endif
