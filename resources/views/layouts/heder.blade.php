@@ -70,7 +70,7 @@
         <script>
             Swal.fire({
                 position: "top-end",
-                icon: "success",
+                icon: "error",
                 title: "{{ session('fail') }}",
                 showConfirmButton: false,
                 timer: 1500

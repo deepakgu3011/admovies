@@ -10,30 +10,6 @@
     <div id="movies-container" style="margin-top:2rem; ">
     </div>
 </div>
-@if(Session::has('success'))
-
-<script>
-    Swal.fire({
-        position: "top-end",
-        icon: "success",
-        title: "Movie or Webseries Updated Successfully!",
-        showConfirmButton: false,
-        timer: 1500
-    });
-</script>
-
-@elseif(Session::has('fail'))
-
-            <script>
-                Swal.fire({
-                    position: "top-end",
-                    icon: "error",
-                    title: "Error While update Movie or Webseries!",
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-            </script>
-@endif
 <script>
   $(document).ready(function() {
     $.ajax({
@@ -51,7 +27,6 @@
                 moviesList += '<p class="card-text"><b>Director:</b> ' + movie.dirname + '</p>';
                 moviesList += '<p class="card-text"><strong>Release Date:</strong> ' + movie.rdate + '</p>';
                 moviesList += '<p class="card-text">' + movie.desc + '</p>';
-                moviesList += '<a href="' + movie.url + '" class="btn btn-success">Download</a>';
                 moviesList += '<a href="movie/' + movie.id + '/edit" class="btn btn-info m-2">Edit</a>';
                 moviesList += '<a href="movie/' + movie.id + '" class="btn btn-primary">Details</a>';
                 moviesList += '</div>';

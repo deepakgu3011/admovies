@@ -20,14 +20,14 @@
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: '{{ route("logout") }}', 
+                url: '{{ route("logout") }}',
                 type: 'POST',
                 dataType: 'json',
                 data: {
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(response) {
-                    console.log(response); 
+                    console.log(response);
                     Swal.fire("Logged out!", "", "success").then(() => {
                         window.location.href = '/public';
                     });
