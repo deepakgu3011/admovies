@@ -3,18 +3,6 @@
     <title>Login</title>
 @endpush
 @section('content')
-@if (Session('success'))
-<script>
-    Swal.fire({
-        position: "top-end",
-        icon: "success",
-        title: "Thanks for Registered With US.",
-        showConfirmButton: false,
-        timer: 1500
-    });
-</script>
-
-@endif
     <div class="container1">
         <h1>Admin login </h1>
         <div class="col">

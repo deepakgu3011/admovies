@@ -49,11 +49,14 @@ class MovieController extends Controller
         $movie->desc = $request->desc;
 
         if ($request->hasFile('pic')) {
-            $image = $request->file('pic');
-            $name = time().'.'.$image->getClientOriginalExtension();
-            $destinationPath = public_path('/images');
-            $image->move($destinationPath, $name);
-            $movie->pic = $name;
+            $folder = $request->category === 'movies' ? 'movies' : 'webseries';
+            $filename = $request->file('pic')->getClientOriginalName();
+            $directory = public_path($folder);
+            if (!file_exists($directory)) {
+                mkdir($directory, 0755, true);
+            }
+            $path = $request->file('pic')->move($directory, $filename);
+            $movie->pic = $folder.'/'.$filename;
         }
 
         $movie->save();
@@ -70,7 +73,7 @@ class MovieController extends Controller
             }
         }
 
-        return redirect()->back()->with('success', 'Movie or Webseries Added Successfully!');
+        return redirect('/dashboard')->with('success', 'Movie or Webseries Added Successfully!');
     }
 
     public function sendReply(Request $request)
@@ -90,7 +93,7 @@ class MovieController extends Controller
 
     public function show(string $id)
     {
-        $data['movie'] = Movies::findOrFail($id);
+        $data['movie'] = Movies::with('movieurl')->findOrFail($id);
 
         return view('admin.movie.show', $data);
     }

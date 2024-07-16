@@ -3,18 +3,6 @@
     <title>Login</title>
 @endpush
 @section('content')
-@if (Session('fail'))
-<script>
-    Swal.fire({
-        position: "top-end",
-        icon: "error",
-        title: "Invalid username or password.",
-        showConfirmButton: false,
-        timer: 1500
-    });
-</script>
-
-@endif
     <div class="container1">
         <h1>Admin login </h1>
         <div class="col">

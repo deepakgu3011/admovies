@@ -2,19 +2,10 @@
 
 @section('content')
     <div class="container1">
-        @if (Session::has('success'))
-            <script>
-                Swal.fire({
-                    position: "top-end",
-                    icon: "success",
-                    title: "Movie or Webseries Updated Successfully!",
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-            </script>
-            @endif
-
-        {{-- @dd($movies->movieurl) --}}
+        <div class="back">
+            <a href="{{ url('/dashboard') }}">Home</a>&nbsp;&nbsp;/&nbsp;&nbsp;
+            <a href="{{ url('/') }}"  class="disabled-link">{{ $movies->name }}</a>
+        </div>
         <form action="{{ route('movie.update', $movies->id) }}" method="post" enctype="multipart/form-data">
             @csrf
             @method('PUT')
@@ -41,7 +32,8 @@
             @enderror
             <br>
 
-            <label for="year">Image <i class="fa fa-eye fa-regular" aria-hidden="true" onclick="show()"></i></label>
+            <label for="year">Image <i class="fa fa-eye fa-regular" aria-hidden="true" onclick="show()" style="cursor: pointer;"></i></label>
+            </i></label>
             <input type="file" name="pic" id="imageInput" onchange="previewImage(event)">
             <i class="fa-solid fa-xmark" id="removeButton" onclick="removeImage()" style="display: none;"></i>
             <img src="{{ url($movies->pic) }}" alt="" id="image" style="display: none;">

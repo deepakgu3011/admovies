@@ -1,19 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container1 w-50">
-        @if (Session('success'))
-            <script>
-                Swal.fire({
-                    position: "top-end",
-                    icon: "success",
-                    title: "Movie or Webseries Added Successfully!",
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-            </script>
-        @endif
-
+    <div class="container1">
+        <div class="back">
+            <a href="{{ url('/dashboard') }}">Home</a>&nbsp;&nbsp;/&nbsp;&nbsp;
+            <a href="{{ url('/') }}"  class="disabled-link">{{ "Create New Movies" }}</a>
+        </div>
         <form action="{{ route('movie.store') }}" method="post" enctype="multipart/form-data">
             @csrf
             <input type="text" name="user_id" value="{{ auth()->user()->id }}" hidden>
@@ -39,11 +31,15 @@
             @enderror
             <br>
 
-            <label for="year">Image</label>
-            <input type="file" name="pic" id="">
+            <label for="image">Image</label>
+            <input type="file" name="pic" id="imageInput" onchange="previewImage(event)">
             @error('pic')
                 <span class="text-danger">{{ $message }}</span>
             @enderror
+            <br>
+            <i class="fa-solid fa-xmark" id="removeButton" onclick="removeImage()" style="display: none;"></i>
+
+            <img id="image" style="display: none; max-width: 100px; max-height: 100px;">
             <br>
 
             <div id="url-inputs">
@@ -78,5 +74,27 @@
         </form>
     </div>
 
+<script>
+function previewImage(event) {
+            var reader = new FileReader();
+            reader.onload = function() {
+                var output = document.getElementById('image');
+                var removeButton = document.getElementById('removeButton');
+                output.src = reader.result;
+                output.style.display = 'block';
+                removeButton.style.display = 'block';
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        }
 
+        function removeImage() {
+            var imageInput = document.getElementById('imageInput');
+            var image = document.getElementById('image');
+            var removeButton = document.getElementById('removeButton');
+            imageInput.value = '';
+            image.src = '';
+            image.style.display = 'none';
+            removeButton.style.display = 'none';
+        }
+</script>
 @endsection

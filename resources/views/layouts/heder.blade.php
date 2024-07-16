@@ -55,5 +55,26 @@
         <p class="text-primary">Current Time: {{ now()->format('d-M-y') }}</p>
     </header>
     <main>
+        @if (Session('success'))
+        <script>
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "{{ session('success') }}",
+                showConfirmButton: false,
+                timer: 1500
+            });
+        </script>
+        @elseif (Session('fail'))
+        <script>
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "{{ session('fail') }}",
+                showConfirmButton: false,
+                timer: 1500
+            });
+        </script>
+    @endif
         @yield('content')
     </main>

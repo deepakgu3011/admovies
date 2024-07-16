@@ -2,8 +2,14 @@
 @section('content')
 <div class="container2">
     <div class="back">
+        @if (auth()->user())
+        <a href="{{ url('/dashboard') }}">Dashboard</a>&nbsp;&nbsp;/&nbsp;&nbsp;
+        <a href="{{ url('/') }}"  class="disabled-link">{{ "About Us" }}</a>
+
+        @else
         <a href="{{ url('/') }}">Home</a>&nbsp;&nbsp;/&nbsp;&nbsp;
-        <a href="{{ url('/about') }}"  class="disabled-link">About us</a>
+        <a href="{{ url('/') }}"  class="disabled-link">{{ "About Us" }}</a>
+        @endif
     </div>
     <header>
         <h1>Welcome to <span>Filmi Duniya</span></h1>

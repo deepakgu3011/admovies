@@ -2,6 +2,16 @@
 @section('content')
 
 <div class="container3">
+    <div class="back">
+        @if (auth()->user())
+        <a href="{{ url('/dashboard') }}">Dashboard</a>&nbsp;&nbsp;/&nbsp;&nbsp;
+        <a href="{{ url('/') }}"  class="disabled-link">{{ "Privacy Policy" }}</a>
+
+        @else
+        <a href="{{ url('/') }}">Home</a>&nbsp;&nbsp;/&nbsp;&nbsp;
+        <a href="{{ url('/') }}"  class="disabled-link">{{ "Privacy Policy" }}</a>
+        @endif
+    </div>
     <h1>Privacy Policy</h1>
 
     <h2>Introduction</h2>
