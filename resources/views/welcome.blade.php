@@ -5,7 +5,7 @@
         <h1 class="text-center">Welcome to Our Film Website!</h1>
 
         <h2 class="text-center">
-            <marquee behavior="alternate" direction="right">Latest Movies And webseries Available:</marquee>
+            <marquee behavior="alternate" direction="right" onmouseover="this.stop()" onmouseout="this.start()">Latest Movies And webseries Available:</marquee>
         </h2>
         <hr>
 
@@ -21,7 +21,11 @@
                                 <h5 class="card-title">{{ $movie->name }}</h5>
                                 <p class="card-text">Director: {{ $movie->dirname }}</p>
                                 <p class="card-text">Release Year: {{ $movie->rdate }}</p>
-                                <p class="card-text">{{ $movie->desc }}</p>
+                                 @php
+                                    $words = explode(' ', $movie->desc);
+                                    $shortDesc = implode(' ', array_slice($words, 0, 10));
+                                @endphp
+                                <p class="card-text">{{ $shortDesc }}......</p>
                                 @if (auth()->check())
                                 <a href="{{ route('movie.show', $movie->id) }}" class="btn btn-info">More
                                     Information</a>
@@ -51,7 +55,11 @@
                                 <h5 class="card-title">{{ $movie->name }}</h5>
                                 <p class="card-text">Director: {{ $movie->dirname }}</p>
                                 <p class="card-text">Release Date: {{ $movie->rdate }}</p>
-                                <p class="card-text">{{ $movie->desc }}</p>
+                                 @php
+                                    $words = explode(' ', $movie->desc);
+                                    $shortDesc = implode(' ', array_slice($words, 0, 10));
+                                @endphp
+                                <p class="card-text">{{ $shortDesc }}......</p>
                                 @if (auth()->check())
                                     <a href="{{ route('movie.show', $movie->id) }}" class="btn btn-info">More
                                         Information</a>
